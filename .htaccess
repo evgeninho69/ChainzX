@@ -1,0 +1,22 @@
+# Beget Node.js configuration
+# This file is used for Node.js applications on Beget hosting
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Proxy requests to Node.js application
+# Beget uses port from environment variable PORT
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://localhost:$PORT/$1 [P,L]
+
+# Set environment variables (if needed)
+# SetEnv PORT 3000
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+

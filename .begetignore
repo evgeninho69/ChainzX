@@ -1,0 +1,16 @@
+# Files to ignore when deploying to Beget
+node_modules/
+.git/
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.map
+dist/
+*.md
+!README.md
+!DEPLOY.md
+!BEGET_QUICKSTART.md
+

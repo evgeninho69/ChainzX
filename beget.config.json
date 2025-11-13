@@ -1,0 +1,29 @@
+{
+  "name": "chainz-mvp",
+  "version": "1.0.0",
+  "description": "CHAINZ MVP - Telegram bot deployment configuration for Beget",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "tsc",
+    "migrate": "node dist/database/migrations/run.js"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "beget": {
+    "node_version": "18.x",
+    "port": 3000,
+    "start_command": "npm start",
+    "build_command": "npm run build",
+    "environment_variables": [
+      "BOT_TOKEN",
+      "DATABASE_URL",
+      "ADMIN_PASSWORD",
+      "NODE_ENV",
+      "PORT"
+    ]
+  }
+}
+
