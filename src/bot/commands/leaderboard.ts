@@ -9,7 +9,7 @@ export async function handleLeaderboard(ctx: Context) {
     const userRank = await leaderboardService.getUserRank(userId);
     const userLinks = await leaderboardService.getUserLinks(userId);
 
-    let message = `${ctx.i18n.t('leaderboard_title')}\n\n`;
+    let message = `${ctx.i18n!.t('leaderboard_title')}\n\n`;
 
     // Show top 10
     const top10 = topUsers.slice(0, 10);
@@ -21,7 +21,7 @@ export async function handleLeaderboard(ctx: Context) {
     });
 
     // Show user's position
-    message += ctx.i18n.t('leaderboard_you', {
+    message += ctx.i18n!.t('leaderboard_you', {
       rank: userRank,
       links: userLinks.toLocaleString()
     });
@@ -29,7 +29,7 @@ export async function handleLeaderboard(ctx: Context) {
     await ctx.reply(message);
   } catch (error) {
     console.error('Leaderboard command error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }
 

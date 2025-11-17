@@ -30,7 +30,7 @@ export async function handleCallbacks(ctx: Context) {
       const character = characterService.getAllCharacters().find(c => c.id === characterId);
       if (character) {
         await ctx.editMessageText(
-          ctx.i18n.t('character_selected', {
+          ctx.i18n!.t('character_selected', {
             name: character.name,
             bonus: character.bonus
           })
@@ -50,7 +50,7 @@ export async function handleCallbacks(ctx: Context) {
       // Update i18n context
       ctx.i18n!.locale = lang;
       
-      await ctx.editMessageText(ctx.i18n.t('language_changed'));
+      await ctx.editMessageText(ctx.i18n!.t('language_changed'));
       
       // After language selection, show character selection if needed
       const user = await userService.getUser(ctx.from!.id);
@@ -63,7 +63,7 @@ export async function handleCallbacks(ctx: Context) {
         ]);
 
         await ctx.reply(
-          ctx.i18n.t('choose_character'),
+          ctx.i18n!.t('choose_character'),
           {
             reply_markup: {
               inline_keyboard: keyboard
@@ -105,14 +105,17 @@ export async function handleCallbacks(ctx: Context) {
 
     // Guild callbacks
     if (callbackData === 'guild_create') {
+      if (!ctx.session) {
+        ctx.session = {};
+      }
       ctx.session.awaitingGuildName = true;
-      await ctx.reply(ctx.i18n.t('guild_create_prompt'));
+      await ctx.reply(ctx.i18n!.t('guild_create_prompt'));
       return;
     }
 
     if (callbackData === 'guild_browse') {
       const allGuilds = await guildService.getAllGuilds();
-      let message = `${ctx.i18n.t('guilds_title')}\n\n`;
+      let message = `${ctx.i18n!.t('guilds_title')}\n\n`;
       
       allGuilds.slice(0, 20).forEach((guild, idx) => {
         message += `${idx + 1}. ${guild.name} — ${guild.total_links.toLocaleString()} LINKS (${guild.member_count} players)\n`;
@@ -135,7 +138,7 @@ export async function handleCallbacks(ctx: Context) {
       const allGuilds = await guildService.getAllGuilds();
       const guild = allGuilds.find(g => g.id === guildId);
       await guildService.joinGuild(ctx.from!.id, guildId);
-      await ctx.reply(ctx.i18n.t('guild_created', { name: guild?.name || 'Team' }));
+      await ctx.reply(ctx.i18n!.t('guild_created', { name: guild?.name || 'Team' }));
       return;
     }
 
@@ -159,7 +162,7 @@ export async function handleCallbacks(ctx: Context) {
       await ctx.reply(
         `🔗 Твоя ссылка:\n${inviteLink}\n\n` +
         `Нажми и удержи чтобы скопировать ☝️`,
-        { disable_web_page_preview: true }
+        { link_preview_options: { is_disabled: true } }
       );
       return;
     }
@@ -210,7 +213,7 @@ export async function handleCallbacks(ctx: Context) {
       try {
         const user = await userService.getUser(userId);
         if (!user) {
-          await ctx.answerCbQuery(ctx.i18n.t('error'), { show_alert: true });
+          await ctx.answerCbQuery(ctx.i18n!.t('error'), { show_alert: true });
           return;
         }
 
@@ -218,15 +221,15 @@ export async function handleCallbacks(ctx: Context) {
         const chestCost = 10000;
         if (user.links_balance < chestCost) {
           await ctx.answerCbQuery(
-            ctx.i18n.t('shop_insufficient') || `❌ Недостаточно LINKS! Нужно ${chestCost.toLocaleString()} LINKS`,
+            ctx.i18n!.t('shop_insufficient') || `❌ Недостаточно LINKS! Нужно ${chestCost.toLocaleString()} LINKS`,
             { show_alert: true }
           );
           
           // Restore shop message
-          const shopText = `${ctx.i18n.t('shop_title')}\n\n` +
-            `${ctx.i18n.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
-            `${ctx.i18n.t('shop_chest')}\n` +
-            `${ctx.i18n.t('shop_chances')}`;
+          const shopText = `${ctx.i18n!.t('shop_title')}\n\n` +
+            `${ctx.i18n!.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
+            `${ctx.i18n!.t('shop_chest')}\n` +
+            `${ctx.i18n!.t('shop_chances')}`;
           
           await ctx.editMessageText(shopText, {
             reply_markup: {
@@ -282,7 +285,7 @@ export async function handleCallbacks(ctx: Context) {
         
         if (error.message === 'Insufficient balance' || error.message?.includes('balance')) {
           await ctx.answerCbQuery(
-            ctx.i18n.t('shop_insufficient') || `❌ Недостаточно LINKS! Нужно 10,000 LINKS`,
+            ctx.i18n!.t('shop_insufficient') || `❌ Недостаточно LINKS! Нужно 10,000 LINKS`,
             { show_alert: true }
           );
           
@@ -290,10 +293,10 @@ export async function handleCallbacks(ctx: Context) {
           try {
             const user = await userService.getUser(userId);
             if (user) {
-              const shopText = `${ctx.i18n.t('shop_title')}\n\n` +
-                `${ctx.i18n.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
-                `${ctx.i18n.t('shop_chest')}\n` +
-                `${ctx.i18n.t('shop_chances')}`;
+              const shopText = `${ctx.i18n!.t('shop_title')}\n\n` +
+                `${ctx.i18n!.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
+                `${ctx.i18n!.t('shop_chest')}\n` +
+                `${ctx.i18n!.t('shop_chances')}`;
               
               await ctx.editMessageText(shopText, {
                 reply_markup: {
@@ -307,7 +310,7 @@ export async function handleCallbacks(ctx: Context) {
             console.error('Failed to restore shop message:', restoreError);
           }
         } else {
-          await ctx.answerCbQuery(ctx.i18n.t('error'), { show_alert: true });
+          await ctx.answerCbQuery(ctx.i18n!.t('error'), { show_alert: true });
           throw error;
         }
       }
@@ -316,7 +319,7 @@ export async function handleCallbacks(ctx: Context) {
 
   } catch (error) {
     console.error('Callback handler error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }
 

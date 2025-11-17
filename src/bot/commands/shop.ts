@@ -8,15 +8,15 @@ export async function handleShop(ctx: Context) {
     const user = await userService.getUser(userId);
 
     if (!user) {
-      await ctx.reply(ctx.i18n.t('error'));
+      await ctx.reply(ctx.i18n!.t('error'));
       return;
     }
 
     await ctx.reply(
-      `${ctx.i18n.t('shop_title')}\n\n` +
-      `${ctx.i18n.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
-      `${ctx.i18n.t('shop_chest')}\n` +
-      `${ctx.i18n.t('shop_chances')}`,
+      `${ctx.i18n!.t('shop_title')}\n\n` +
+      `${ctx.i18n!.t('shop_balance', { balance: user.links_balance.toLocaleString() })}\n\n` +
+      `${ctx.i18n!.t('shop_chest')}\n` +
+      `${ctx.i18n!.t('shop_chances')}`,
       {
         reply_markup: {
           inline_keyboard: [
@@ -27,7 +27,7 @@ export async function handleShop(ctx: Context) {
     );
   } catch (error) {
     console.error('Shop command error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }
 

@@ -54,6 +54,6 @@ export async function handleInvite(ctx: Context) {
     });
   } catch (error) {
     console.error('Invite command error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }

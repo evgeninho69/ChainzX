@@ -9,17 +9,17 @@ export async function handleTeam(ctx: Context) {
     // Check if user exists
     const user = await userService.getUser(userId);
     if (!user) {
-      await ctx.reply(ctx.i18n.t('error'));
+      await ctx.reply(ctx.i18n!.t('error'));
       return;
     }
 
     const tree = await referralService.getReferralTree(userId);
 
-    let message = `${ctx.i18n.t('team_title')}\n\n`;
+    let message = `${ctx.i18n!.t('team_title')}\n\n`;
     
-    message += `${ctx.i18n.t('team_level1')}\n`;
+    message += `${ctx.i18n!.t('team_level1')}\n`;
     if (tree.level1.length === 0) {
-      message += `└─ ${ctx.i18n.t('team_no_friends') || 'No friends yet'}\n`;
+      message += `└─ ${ctx.i18n!.t('team_no_friends') || 'No friends yet'}\n`;
     } else {
       tree.level1.forEach((ref, idx) => {
         const prefix = idx === tree.level1.length - 1 ? '└─' : '├─';
@@ -28,10 +28,10 @@ export async function handleTeam(ctx: Context) {
       });
     }
 
-    message += `\n${ctx.i18n.t('team_level2')}\n`;
-    message += `└─ ${tree.level2.length} ${ctx.i18n.t('team_people') || 'people'}\n`;
+    message += `\n${ctx.i18n!.t('team_level2')}\n`;
+    message += `└─ ${tree.level2.length} ${ctx.i18n!.t('team_people') || 'people'}\n`;
 
-    message += `\n${ctx.i18n.t('team_income', {
+    message += `\n${ctx.i18n!.t('team_income', {
       l1: tree.level1Earnings.toLocaleString(),
       l2: tree.level2Earnings.toLocaleString(),
       total: (tree.level1Earnings + tree.level2Earnings).toLocaleString()
@@ -44,7 +44,7 @@ export async function handleTeam(ctx: Context) {
       console.error('Error details:', error.message, error.stack);
     }
     try {
-      await ctx.reply(ctx.i18n.t('error'));
+      await ctx.reply(ctx.i18n!.t('error'));
     } catch (replyError) {
       console.error('Failed to send error message:', replyError);
     }

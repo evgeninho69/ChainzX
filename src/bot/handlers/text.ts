@@ -6,11 +6,11 @@ export async function handleText(ctx: Context) {
   const userId = ctx.from!.id;
 
   // Handle guild name input
-  if (ctx.session.awaitingGuildName) {
+  if (ctx.session?.awaitingGuildName) {
     const guildName = text.trim();
 
     if (guildName.length > 30) {
-      await ctx.reply(ctx.i18n.t('guild_name_too_long'));
+      await ctx.reply(ctx.i18n!.t('guild_name_too_long'));
       return;
     }
 
@@ -21,19 +21,21 @@ export async function handleText(ctx: Context) {
 
     try {
       const guild = await guildService.createGuild(guildName, userId);
-      ctx.session.awaitingGuildName = false;
-      await ctx.reply(ctx.i18n.t('guild_created', { name: guild.name }));
+      if (ctx.session) {
+        ctx.session.awaitingGuildName = false;
+      }
+      await ctx.reply(ctx.i18n!.t('guild_created', { name: guild.name }));
     } catch (error: any) {
       if (error.message === 'Guild name already exists') {
-        await ctx.reply(ctx.i18n.t('guild_name_exists'));
+        await ctx.reply(ctx.i18n!.t('guild_name_exists'));
       } else {
-        await ctx.reply(ctx.i18n.t('error'));
+        await ctx.reply(ctx.i18n!.t('error'));
       }
     }
     return;
   }
 
   // Default: show help
-  await ctx.reply(ctx.i18n.t('help'));
+  await ctx.reply(ctx.i18n!.t('help'));
 }
 

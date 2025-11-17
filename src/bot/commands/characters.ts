@@ -34,7 +34,7 @@ export async function handleCharacters(ctx: Context) {
     const userCharacters = await characterService.getUserCharacters(userId);
     const activeCharacter = await characterService.getUserActiveCharacter(userId);
 
-    let message = `👤 ${ctx.i18n.t('characters_title')}\n\n`;
+    let message = `👤 ${ctx.i18n!.t('characters_title')}\n\n`;
 
     // Active character with box
     if (activeCharacter) {
@@ -50,7 +50,7 @@ export async function handleCharacters(ctx: Context) {
     }
 
     message += `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-    message += `📦 ${ctx.i18n.t('characters_collection')}\n\n`;
+    message += `📦 ${ctx.i18n!.t('characters_collection')}\n\n`;
 
     // Common characters
     const commons = CHARACTERS.filter(c => c.rarity === 'common');
@@ -138,6 +138,6 @@ export async function handleCharacters(ctx: Context) {
     });
   } catch (error) {
     console.error('Characters command error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }

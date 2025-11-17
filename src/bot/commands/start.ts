@@ -43,7 +43,7 @@ export async function handleStart(ctx: Context) {
         try {
           await ctx.telegram.sendMessage(
             referrerId,
-            ctx.i18n.t('referral_joined', { username: username || firstName || 'Someone' })
+            ctx.i18n!.t('referral_joined', { username: username || firstName || 'Someone' })
           );
         } catch (error) {
           console.error('Failed to notify referrer:', error);
@@ -59,7 +59,7 @@ export async function handleStart(ctx: Context) {
     if (!user.character_id && (!user.language_code || (user.language_code === 'en' && !ctx.from?.language_code))) {
       // Show language selection for new users
       await ctx.reply(
-        ctx.i18n.t('language_title'),
+        ctx.i18n!.t('language_title'),
         {
           reply_markup: {
             inline_keyboard: [
@@ -85,7 +85,7 @@ export async function handleStart(ctx: Context) {
       ]);
 
       await ctx.reply(
-        ctx.i18n.t('choose_character'),
+        ctx.i18n!.t('choose_character'),
         {
           reply_markup: {
             inline_keyboard: keyboard
@@ -100,7 +100,7 @@ export async function handleStart(ctx: Context) {
     const rank = await leaderboardService.getUserRank(telegramId);
 
     await ctx.reply(
-      ctx.i18n.t('main_menu', {
+      ctx.i18n!.t('main_menu', {
         balance: user.links_balance,
         count: referralCount,
         rank: rank

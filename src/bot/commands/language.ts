@@ -2,7 +2,7 @@ import { Context } from 'telegraf';
 
 export async function handleLanguage(ctx: Context) {
   await ctx.reply(
-    ctx.i18n.t('language_title'),
+    ctx.i18n!.t('language_title'),
     {
       reply_markup: {
         inline_keyboard: [

@@ -8,7 +8,7 @@ export async function handleGuilds(ctx: Context) {
     const topGuilds = await guildService.getTopGuilds(10);
     const userGuild = await guildService.getUserGuild(userId);
 
-    let message = `${ctx.i18n.t('guilds_title')}\n\n`;
+    let message = `${ctx.i18n!.t('guilds_title')}\n\n`;
 
     topGuilds.forEach((guild, idx) => {
       const rank = idx + 1;
@@ -17,9 +17,9 @@ export async function handleGuilds(ctx: Context) {
     });
 
     if (userGuild) {
-      message += ctx.i18n.t('guild_your_team', { name: userGuild.name });
+      message += ctx.i18n!.t('guild_your_team', { name: userGuild.name });
     } else {
-      message += ctx.i18n.t('guild_no_team');
+      message += ctx.i18n!.t('guild_no_team');
     }
 
     const keyboard = [
@@ -38,7 +38,7 @@ export async function handleGuilds(ctx: Context) {
     });
   } catch (error) {
     console.error('Guilds command error:', error);
-    await ctx.reply(ctx.i18n.t('error'));
+    await ctx.reply(ctx.i18n!.t('error'));
   }
 }
 
